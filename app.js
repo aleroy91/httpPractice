@@ -1,13 +1,32 @@
-// Send GET request to server
+const getUrl = "http://localhost:3000/get";
+const postUrl = "http://localhost:3000/post";
+let postData = '';
 
-const url = "http://localhost:3000/get";
 const getMessage = () => {
-    fetch(url)
-    .then((res) => {
-        return res.text();
-    })
+    fetch(getUrl)
+    .then(res => res.text())
     .then((data) => {
         let output = `<h4>${data}</h4>`;
         document.getElementById('returnMessage').innerHTML = output;
     })
+    .catch(error => console.error('Error:', error));
 }
+
+const postMessage = () => {
+    postData = document.getElementById('inputMessage').value;
+
+    fetch(postUrl, {
+        method: 'POST',
+        headers:{
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({message: postData}),
+        mode: "cors"
+    })
+    .then(res => res)
+    .catch(error => console.error('Error:', error));
+
+    clearInputField();
+}
+
+const clearInputField = () => document.getElementById('inputMessage').value = '';
