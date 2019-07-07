@@ -6,8 +6,15 @@ const getMessage = () => {
     fetch(getUrl)
     .then(res => res.text())
     .then((data) => {
-        let output = `<h4>${data}</h4>`;
-        document.getElementById('returnMessage').innerHTML = output;
+        let output = JSON.parse(data);
+        let list = document.getElementById('returnMessage');
+
+        Object.values(output).forEach((element) => {
+            let listItem = document.createElement("li");
+            let itemContent = document.createTextNode(element);
+            listItem.appendChild(itemContent);
+            list.appendChild(listItem);
+        });
     })
     .catch(error => console.error('Error:', error));
 }

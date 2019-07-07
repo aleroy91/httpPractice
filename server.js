@@ -7,6 +7,10 @@ const sqlite3 = require('sqlite3');
 const app = express();
 const db = new sqlite3.Database('./db.sqlite');
 
+app.use(morgan('tiny'));
+app.use(bodyParser());
+app.use(cors());
+
 db.run('CREATE TABLE IF NOT EXISTS test (name);', (err) => {
     if (err) {
         console.log(err.message);
@@ -15,17 +19,20 @@ db.run('CREATE TABLE IF NOT EXISTS test (name);', (err) => {
     }
 });
 
-app.use(morgan('tiny'));
-app.use(bodyParser());
-app.use(cors());
-
 app.get('/get', (req, res) => {
-    // if () {
-        // res.send("test")
-    // } else {
-        let messageFromDatabase = () => 'SELECT COUNT(*) FROM test;';
-        res.send(messageFromDatabase);
-    // }
+    db.all('SELECT DISTINCT Name name FROM test ORDER BY name', (err, rows) => {
+        if (err) {
+            throw err;
+        }
+
+        let data = {};
+
+        rows.forEach((row, i) => {
+            data[i] = row.name;
+        })
+        
+        res.send(data);
+    });
 });
 
 app.post('/post', (req, res, next) => {
