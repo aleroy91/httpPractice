@@ -1,13 +1,16 @@
 const getUrl = "http://localhost:3000/get";
 const postUrl = "http://localhost:3000/post";
 let postData = '';
+let list = '';
 
-const getMessage = () => {
+const getTodos = () => {
+    clearList();
+    selectList();
+
     fetch(getUrl)
     .then(res => res.text())
     .then((data) => {
         let output = JSON.parse(data);
-        let list = document.getElementById('returnMessage');
 
         Object.values(output).forEach((element) => {
             let listItem = document.createElement("li");
@@ -16,10 +19,10 @@ const getMessage = () => {
             list.appendChild(listItem);
         });
     })
-    .catch(error => console.error('Error:', error));
+    .catch(error => console.error('Error:', error));    
 }
 
-const postMessage = () => {
+const postTodos = () => {
     postData = document.getElementById('inputMessage').value;
 
     fetch(postUrl, {
@@ -36,4 +39,17 @@ const postMessage = () => {
     clearInputField();
 }
 
+const clearTodos = () => {
+    selectList();
+    clearList();
+}
+
 const clearInputField = () => document.getElementById('inputMessage').value = '';
+const selectList = () => list = document.getElementById('returnMessage');
+const clearList = () => {
+    if (list) {
+        while (list.childElementCount > 0) {
+            list.children[0].remove();
+        }
+    }
+}

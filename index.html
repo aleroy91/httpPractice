@@ -7,14 +7,17 @@
     <script type="text/javascript" src="./server.js"></script>
 </head>
 <body>
-    <h1>My first attempt at linking front and backend with a GET request</h1>
+    <h1>Full Stack Todo List</h1>
 
     <div>
-        <button onclick="postMessage()">Post Message</button>
+        <button onclick="postTodos()">Add Todo</button>
         <input id="inputMessage">
     </div>
     <div>
-        <button onclick="getMessage()">Get Messages Saved in DB</button>
+        <button onclick="getTodos()">Retrieve Todos From DB</button>
+    </div>
+    <div>
+        <button onclick="clearTodos()">Clear Todo List</button>
     </div>    
 
     <div id="returnMessage"></div>
