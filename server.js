@@ -43,8 +43,22 @@ app.post('/post', (req, res, next) => {
 
     db.run('INSERT INTO test VALUES ($testMessage);', {
         $testMessage: testMessage
+    }, (err) => {
+        if (err) {
+            throw err;
+        }
     });
 });
+
+app.delete('/delete', (req, res, next) => {
+    db.run('DELETE FROM test;', (err) => {
+        if (err) {
+            throw err;
+        }
+
+        console.log("All Records Deleted");
+    });
+})
 
 const PORT = 3000;
 app.listen(PORT, () => {

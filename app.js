@@ -1,5 +1,6 @@
 const getUrl = "http://localhost:3000/get";
 const postUrl = "http://localhost:3000/post";
+const deleteUrl = "http://localhost:3000/delete";
 let postData = '';
 let list = '';
 
@@ -42,6 +43,16 @@ const postTodos = () => {
 const clearTodos = () => {
     selectList();
     clearList();
+
+    fetch(deleteUrl, {
+        method: 'DELETE',
+        headers:{
+          'Content-Type': 'application/json'
+        },
+        mode: "cors"
+    })
+    .then(res => res)
+    .catch(error => console.error('Error:', error));
 }
 
 const clearInputField = () => document.getElementById('inputMessage').value = '';
