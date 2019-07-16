@@ -32,16 +32,18 @@ const getTodos = () => {
 const addTodos = () => {
     postData = document.getElementById('inputMessage').value;
 
-    fetch(postUrl, {
-        method: 'POST',
-        headers:{
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({message: postData}),
-        mode: "cors"
-    })
-    .then(res => res)
-    .catch(error => console.error('Error:', error));
+    if (postData) {
+        fetch(postUrl, {
+            method: 'POST',
+            headers:{
+              'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({message: postData}),
+            mode: "cors"
+        })
+        .then(res => res)
+        .catch(error => console.error('Error:', error));    
+    }
 
     clearInputField();
 }
