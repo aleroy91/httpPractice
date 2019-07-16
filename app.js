@@ -14,16 +14,22 @@ const getTodos = () => {
         let output = JSON.parse(data);
 
         Object.values(output).forEach((element) => {
-            let listItem = document.createElement("li");
+            let itemDiv = document.createElement('div');
+            let deleteButton = document.createElement('button');
+            let listItem = document.createElement("span");
             let itemContent = document.createTextNode(element);
+
+            list.appendChild(itemDiv);
             listItem.appendChild(itemContent);
-            list.appendChild(listItem);
+            itemDiv.appendChild(listItem);
+            itemDiv.appendChild(deleteButton);
+            deleteButton.textContent = 'Delete';
         });
     })
     .catch(error => console.error('Error:', error));    
 }
 
-const postTodos = () => {
+const addTodos = () => {
     postData = document.getElementById('inputMessage').value;
 
     fetch(postUrl, {
@@ -62,5 +68,10 @@ const clearList = () => {
         while (list.childElementCount > 0) {
             list.children[0].remove();
         }
+    }
+}
+const hitEnter = () => {
+    if (event.keyCode === (13 || 16)) {
+        addTodos();
     }
 }
