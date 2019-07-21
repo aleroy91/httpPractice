@@ -1,6 +1,7 @@
 const getUrl = "http://localhost:3000/get";
 const postUrl = "http://localhost:3000/post";
 const deleteUrl = "http://localhost:3000/delete";
+const deleteItemUrl = "http://localhost:3000/deleteItem";
 let postData = '';
 let list = '';
 
@@ -24,6 +25,9 @@ const getTodos = () => {
             itemDiv.appendChild(listItem);
             itemDiv.appendChild(deleteButton);
             deleteButton.textContent = 'Delete';
+            deleteButton.onclick = () => { 
+                deleteTodo(element);
+            };
         });
     })
     .catch(error => console.error('Error:', error));    
@@ -61,6 +65,23 @@ const clearTodos = () => {
     })
     .then(res => res)
     .catch(error => console.error('Error:', error));
+}
+
+const deleteTodo = (todo) => {
+    let itemName = todo;
+
+    fetch(deleteItemUrl, {
+        method: 'DELETE',
+        headers:{
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({name: itemName}),
+        mode: "cors"
+    })
+    .then(res => res)
+    .catch(error => console.error('Error:', error));
+
+    getTodos();
 }
 
 const clearInputField = () => document.getElementById('inputMessage').value = '';

@@ -58,6 +58,20 @@ app.delete('/delete', (req, res, next) => {
 
         console.log("All Records Deleted");
     });
+});
+
+app.delete('/deleteItem', (req, res, next) => {
+    let name = req.body.name;
+
+    db.run('DELETE FROM test WHERE name = $name;', {
+        $name: name
+    }, (err) => {
+        if (err) {
+            throw err;
+        }
+    });
+
+    console.log(`The following record has been deleted: ${name}`);
 })
 
 const PORT = 3000;
