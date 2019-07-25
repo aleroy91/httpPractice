@@ -26,7 +26,9 @@ const getTodos = () => {
             itemDiv.appendChild(deleteButton);
             deleteButton.textContent = 'Delete';
             deleteButton.onclick = () => { 
-                deleteTodo(element);
+                deleteTodo(element)
+                .then(getTodos())
+                .catch(error => console.log(error))
             };
         });
     })
@@ -53,12 +55,12 @@ const addTodos = () => {
 }
 
 const clearTodos = () => {
-    selectList();
+    select();
     clearList();
 
     fetch(deleteUrl, {
         method: 'DELETE',
-        headers:{
+        headers: {
           'Content-Type': 'application/json'
         },
         mode: "cors"
@@ -68,31 +70,34 @@ const clearTodos = () => {
 }
 
 const deleteTodo = (todo) => {
-    let itemName = todo;
+    return new Promise((resolve, reject) => {
+        let itemName = todo;
 
-    fetch(deleteItemUrl, {
-        method: 'DELETE',
-        headers:{
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({name: itemName}),
-        mode: "cors"
-    })
-    .then(res => res)
-    .catch(error => console.error('Error:', error));
+        fetch(deleteItemUrl, {
+            method: 'DELETE',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({name: itemName}),
+            mode: "cors"
+        })
+        .then(res => res)
+        .catch(error => console.error('Error:', error));
 
-    getTodos();
+        resolve();
+    });
 }
 
-const clearInputField = () => document.getElementById('inputMessage').value = '';
-const selectList = () => list = document.getElementById('returnMessage');
 const clearList = () => {
     if (list) {
         while (list.childElementCount > 0) {
             list.children[0].remove();
         }
-    }
+    } 
 }
+
+const clearInputField = () => document.getElementById('inputMessage').value = '';
+const selectList = () => list = document.getElementById('returnMessage');
 const hitEnter = () => {
     if (event.keyCode === (13 || 16)) {
         addTodos();

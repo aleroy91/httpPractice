@@ -56,6 +56,7 @@ app.delete('/delete', (req, res, next) => {
             throw err;
         }
 
+        res.status(200).send();
         console.log("All Records Deleted");
     });
 });
@@ -69,10 +70,11 @@ app.delete('/deleteItem', (req, res, next) => {
         if (err) {
             throw err;
         }
+    
+        res.status(200).send();
+        console.log(`The following record has been deleted: ${name}`);
     });
-
-    console.log(`The following record has been deleted: ${name}`);
-})
+});
 
 const PORT = 3000;
 app.listen(PORT, () => {
