@@ -29,13 +29,13 @@ app.get('/get', (req, res) => {
 
         rows.forEach((row, i) => {
             data[i] = row.name;
-        })
-        
+        });
+
         res.send(data);
     });
 });
 
-app.post('/post', (req, res, next) => {
+app.post('/post', (req, res) => {
     console.log(req.body);
 
     let testMessage = req.body.message; 
@@ -50,18 +50,17 @@ app.post('/post', (req, res, next) => {
     });
 });
 
-app.delete('/delete', (req, res, next) => {
+app.delete('/delete', (res) => {
     db.run('DELETE FROM test;', (err) => {
         if (err) {
             throw err;
         }
 
-        res.status(200).send();
         console.log("All Records Deleted");
     });
 });
 
-app.delete('/deleteItem', (req, res, next) => {
+app.delete('/deleteItem', (req, res) => {
     let name = req.body.name;
 
     db.run('DELETE FROM test WHERE name = $name;', {
@@ -71,7 +70,6 @@ app.delete('/deleteItem', (req, res, next) => {
             throw err;
         }
     
-        res.status(200).send();
         console.log(`The following record has been deleted: ${name}`);
     });
 });

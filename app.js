@@ -27,8 +27,6 @@ const getTodos = () => {
             deleteButton.textContent = 'Delete';
             deleteButton.onclick = () => { 
                 deleteTodo(element)
-                .then(getTodos())
-                .catch(error => console.log(error))
             };
         });
     })
@@ -55,7 +53,7 @@ const addTodos = () => {
 }
 
 const clearTodos = () => {
-    select();
+    selectList();
     clearList();
 
     fetch(deleteUrl, {
@@ -70,22 +68,28 @@ const clearTodos = () => {
 }
 
 const deleteTodo = (todo) => {
-    return new Promise((resolve, reject) => {
-        let itemName = todo;
+    let itemName = todo;
 
-        fetch(deleteItemUrl, {
-            method: 'DELETE',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({name: itemName}),
-            mode: "cors"
-        })
-        .then(res => res)
-        .catch(error => console.error('Error:', error));
+    fetch(deleteItemUrl, {
+        method: 'DELETE',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({name: itemName}),
+        mode: "cors"
+    })
+    .then(res => res)
+    .catch(error => console.error('Error:', error));
 
-        resolve();
-    });
+    removeTodoFromFrontEnd(todo);
+}
+
+const removeTodoFromFrontEnd = (todo) => {
+    for (let i = 0; i < list.children.length; i++) {
+        if (list.children[i].children[0].innerHTML === todo) {
+            list.children[i].remove();
+        }
+    }
 }
 
 const clearList = () => {
@@ -97,7 +101,9 @@ const clearList = () => {
 }
 
 const clearInputField = () => document.getElementById('inputMessage').value = '';
+
 const selectList = () => list = document.getElementById('returnMessage');
+
 const hitEnter = () => {
     if (event.keyCode === (13 || 16)) {
         addTodos();
