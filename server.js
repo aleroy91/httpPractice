@@ -2,9 +2,35 @@ const express = require('express');
 const morgan = require('morgan');
 const bodyParser = require('body-parser')
 const cors = require('cors');
+const app = express();
 const sqlite3 = require('sqlite3');
 
-const app = express();
+/* LONG ASS EXPLANATION RE. DATABASES
+
+    I want to replace sqlite with mysql, for scalability reasons.
+    However, this is not currently possible because the node package for mysql
+    does not yet support the default authentication method of MySQL 8;
+    rather, it is based on weak password protection practices which are now very old.
+
+    So because I decided to install the latest version of MySQL, I now have to wait for the 
+    node software to support MySQL 8 Authentication. There is currently a pull request 
+    for this which is undergoing testing, so hopefully it should be available soon!
+
+    Check here to see how it is progressing:
+
+    https://github.com/mysqljs/mysql/pull/2233
+
+*/
+
+// var mysql = require('mysql')
+// var db = mysql.createConnection({
+//   host: 'localhost',
+//   user: 'dbuser',
+//   password: 'Mossadegh1953',
+//   database: 'my_db'
+// })
+
+// db.connect()
 const db = new sqlite3.Database('./db.sqlite');
 
 app.use(morgan('tiny'));
