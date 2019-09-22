@@ -1,9 +1,14 @@
 const getUrl = "http://localhost:3000/get";
 const postUrl = "http://localhost:3000/post";
 const deleteUrl = "http://localhost:3000/delete";
-const deleteItemUrl = "http://localhost:3000/deleteItem";
 let postData = '';
 let list = '';
+
+/* TO CHANGE 
+
+    Alter getTodos function so that it returns items from db in correct order according to their indicies.
+
+*/
 
 const getTodos = () => {
     clearList();
@@ -18,15 +23,17 @@ const getTodos = () => {
             let itemDiv = document.createElement('div');
             let deleteButton = document.createElement('button');
             let listItem = document.createElement("span");
-            let itemContent = document.createTextNode(element);
+            let itemContent = document.createTextNode(element.name);
+            let id = element.id;
 
             list.appendChild(itemDiv);
             listItem.appendChild(itemContent);
+            itemDiv.id = id;
             itemDiv.appendChild(listItem);
             itemDiv.appendChild(deleteButton);
             deleteButton.textContent = 'Delete';
             deleteButton.onclick = () => { 
-                deleteTodo(element)
+                deleteTodo(id)
             };
         });
     })
@@ -67,26 +74,25 @@ const clearTodos = () => {
     .catch(error => console.error('Error:', error));
 }
 
-const deleteTodo = (todo) => {
-    let itemName = todo;
+const deleteTodo = (id) => {
 
-    fetch(deleteItemUrl, {
+    fetch(deleteUrl + `/${id}`, {
         method: 'DELETE',
         headers: {
             'Content-Type': 'application/json'
         },
-        body: JSON.stringify({name: itemName}),
+        body: JSON.stringify({id: id}),
         mode: "cors"
     })
     .then(res => res)
     .catch(error => console.error('Error:', error));
 
-    removeTodoFromFrontEnd(todo);
+    removeTodoFromFrontEnd(id);
 }
 
-const removeTodoFromFrontEnd = (todo) => {
+const removeTodoFromFrontEnd = (todoId) => {
     for (let i = 0; i < list.children.length; i++) {
-        if (list.children[i].children[0].innerHTML === todo) {
+        if (parseInt(list.children[i].id) === todoId) {
             list.children[i].remove();
         }
     }
