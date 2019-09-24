@@ -24,16 +24,16 @@ const getTodos = () => {
             let deleteButton = document.createElement('button');
             let listItem = document.createElement("span");
             let itemContent = document.createTextNode(element.name);
-            let id = element.id;
+            // let id = element.id;
 
             list.appendChild(itemDiv);
             listItem.appendChild(itemContent);
-            itemDiv.id = id;
+            // itemDiv.id = id;
             itemDiv.appendChild(listItem);
             itemDiv.appendChild(deleteButton);
             deleteButton.textContent = 'Delete';
             deleteButton.onclick = () => { 
-                deleteTodo(id)
+                deleteTodo() // id
             };
         });
     })
@@ -74,7 +74,10 @@ const clearTodos = () => {
     .catch(error => console.error('Error:', error));
 }
 
-const deleteTodo = (id) => {
+const deleteTodo = () => { // id
+    let elementToDelete = event.target.parentElement;
+
+    let id = retrieveIndexOfElementToDelete(elementToDelete);
 
     fetch(deleteUrl + `/${id}`, {
         method: 'DELETE',
@@ -86,14 +89,13 @@ const deleteTodo = (id) => {
     })
     .then(res => res)
     .catch(error => console.error('Error:', error));
-
-    removeTodoFromFrontEnd(id);
 }
 
-const removeTodoFromFrontEnd = (todoId) => {
+const retrieveIndexOfElementToDelete = (elementToDelete) => {
     for (let i = 0; i < list.children.length; i++) {
-        if (parseInt(list.children[i].id) === todoId) {
+        if (list.children[i] === elementToDelete) {
             list.children[i].remove();
+            return i;
         }
     }
 }

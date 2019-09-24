@@ -34,29 +34,7 @@ app.use(morgan('tiny'));
 app.use(bodyParser());
 app.use(cors());
 
-/* TO CHANGE
-
-    Currently, the database I am using is autoincrementing - that is to say, the index will continue to increase 
-    for the duration of the table's lifetime. I have done this so that the application removes the correct records
-    from both the visible list on the front end and the database table.
-
-    However, this implementation is resource intensive, and I therefore would be well-served to find a means of 
-    removing items from the front end dynamically (to match default database behaviour). This requires that I select 
-    the todo to be deleted using a loop through the html collection at div id returnMessage, rather than selecting
-    a fixed assigned id for each item as per the current implementation (or something similar). 
-    
-    The basic requirement is that the correct index is always sent to the db, and this will change depending on whether 
-    or not I have already deleted an individual item.
-
-    More info on autoincrementation here: https://www.sqlite.org/autoinc.html
-*/
-
-db.run(
-    `CREATE TABLE IF NOT EXISTS test (
-        id INTEGER PRIMARY KEY AUTOINCREMENT,
-        name string
-    );`, 
-    (err) => {
+db.run(`CREATE TABLE IF NOT EXISTS test (name string);`, (err) => {
         if (err) {
             console.log(err.message);
         } else {
@@ -66,7 +44,7 @@ db.run(
 );
 
 app.get('/get', (req, res) => {
-    db.all('SELECT * FROM test ORDER BY id, name', (err, rows) => {
+    db.all('SELECT * FROM test ORDER BY ROWID', (err, rows) => {
         if (err) {
             throw err;
         }
@@ -75,7 +53,6 @@ app.get('/get', (req, res) => {
 
         rows.forEach((row, i) => {
             data[i] = {
-                id: row.id,
                 name: row.name
             };
         });
@@ -86,10 +63,8 @@ app.get('/get', (req, res) => {
 
 app.post('/post', (req, res) => {
     let testMessage = req.body.message; 
-    let id = req.body.id;
 
-    db.run('INSERT INTO test VALUES ($id, $testMessage);', {
-        $id: id,
+    db.run('INSERT INTO test VALUES ($testMessage);', {
         $testMessage: testMessage
     }, (err) => {
         if (err) {
@@ -114,7 +89,7 @@ app.delete('/delete/:id', (req, res) => {
     let id = req.body.id;
 
     db.run('DELETE FROM test WHERE rowid = $id;', {
-        $id: id
+        $id: id + 1
     }, (err) => {
         if (err) {
             throw err;
