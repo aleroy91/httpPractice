@@ -4,6 +4,20 @@ const deleteUrl = "http://localhost:3000/delete";
 let postData = '';
 let list = '';
 
+/*  TODOs
+    
+    * Tart it up with some css
+    * Change add todo's function so that it adds todos to the ui
+    * Add edit function
+    * Implement local storage
+        - Remove get button
+        - Send all list additions, edits and deletions to the db
+        - For the sake of speed, the UI should make use of localstorage when app is running
+        - When starting the server afresh, the list should build from the contents of the db
+        - This should be marked with a little loading symbols
+
+*/
+
 const retrieveTodos = () => {
     clearList();
     selectList();

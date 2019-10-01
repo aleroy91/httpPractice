@@ -1,5 +1,5 @@
 <head>
-    <rel="stylesheet" type="text/css" />
+    <link href="./css/index.css" type="text/css" rel="stylesheet" />
     <meta content="charset=utf-8" />
 
     <title>GET Request Practice</title>
@@ -9,16 +9,21 @@
 <body>
     <h1>Full Stack Todo List</h1>
 
-    <div>
-        <button onclick="addTodos()">Add Todo</button>
-        <input id="inputMessage" onkeyup="hitEnter()">
-    </div>
-    <div>
-        <button onclick="retrieveTodos()">Retrieve Todos From DB</button>
-    </div>
-    <div>
-        <button onclick="clearTodos()">Clear Todo List</button>
-    </div>    
+    <div id="container">
+        <section id="listControls">
+            <div>
+                <input id="inputMessage" placeholder="Add todos here" onkeyup="hitEnter()">
+            </div>
+            <div>
+                <button class="mainButton" onclick="retrieveTodos()">Retrieve Todos From DB</button>
+            </div>
+            <div>
+                <button class="mainButton" onclick="clearTodos()">Clear Todo List</button>
+            </div>
+        </section>    
 
-    <div id="returnMessage"></div>
+        <section id="listItemControls">
+            <div id="returnMessage"></div>
+        </section>
+    </div>
 </body>
