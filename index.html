@@ -10,17 +10,15 @@
     <h1>Full Stack Todo List</h1>
 
     <div id="container">
-        <section id="listControls">
-            <div>
-                <input id="inputMessage" placeholder="Add todos here" onkeyup="hitEnter()">
-            </div>
-            <div>
-                <button class="mainButton" onclick="retrieveTodos()">Retrieve Todos From DB</button>
-            </div>
-            <div>
-                <button class="mainButton" onclick="clearTodos()">Clear Todo List</button>
-            </div>
-        </section>    
+        <div>
+            <input id="inputMessage" placeholder="Add todos here" onkeyup="hitEnter()">
+        </div>
+        <div>
+            <button class="mainButton" onclick="retrieveTodos()">Retrieve Todos From DB</button>
+        </div>
+        <div>
+            <button class="mainButton" onclick="clearTodos()">Clear Todo List</button>
+        </div>
 
         <section id="listItemControls">
             <div id="returnMessage"></div>

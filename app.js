@@ -29,15 +29,18 @@ const retrieveTodos = () => {
 
         Object.values(output).forEach((element) => {
             let itemDiv = document.createElement('div');
-            let deleteButton = document.createElement('button');
-            let listItem = document.createElement("span");
+            let deleteButton = document.createElement('span');
+            let listItem = document.createElement('span');
             let itemContent = document.createTextNode(element.name);
 
+            deleteButton.className = 'deleteButton';
+            itemDiv.className = 'mainButton todoContainer';
             list.appendChild(itemDiv);
+            listItem.className = 'todoItem';
             listItem.appendChild(itemContent);
             itemDiv.appendChild(listItem);
             itemDiv.appendChild(deleteButton);
-            deleteButton.textContent = 'Delete';
+            deleteButton.textContent = '\u{00D7}';
             deleteButton.onclick = () => { 
                 deleteTodo()
             };
