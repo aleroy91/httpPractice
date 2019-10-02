@@ -6,7 +6,6 @@ let list = '';
 
 /*  TODOs
     
-    * Tart it up with some css
     * Change add todo's function so that it adds todos to the ui
     * Add edit function
     * Implement local storage
@@ -50,20 +49,37 @@ const retrieveTodos = () => {
 }
 
 const addTodos = () => {
-    postData = document.getElementById('inputMessage').value;
+    newTodo = document.getElementById('inputMessage').value;
 
-    if (postData) {
+    if (newTodo) {
         fetch(postUrl, {
             method: 'POST',
             headers:{
               'Content-Type': 'application/json'
             },
-            body: JSON.stringify({message: postData}),
+            body: JSON.stringify({message: newTodo}),
             mode: "cors"
         })
         .then(res => res)
         .catch(error => console.error('Error:', error));    
     }
+
+    let itemDiv = document.createElement('div');
+    let deleteButton = document.createElement('span');
+    let listItem = document.createElement('span');
+    let itemContent = document.createTextNode(newTodo);
+
+    deleteButton.className = 'deleteButton';
+    itemDiv.className = 'mainButton todoContainer';
+    document.getElementById('returnMessage').appendChild(itemDiv);
+    listItem.className = 'todoItem';
+    listItem.appendChild(itemContent);
+    itemDiv.appendChild(listItem);
+    itemDiv.appendChild(deleteButton);
+    deleteButton.textContent = '\u{00D7}';
+    deleteButton.onclick = () => { 
+        deleteTodo()
+    };
 
     clearInputField();
 }
