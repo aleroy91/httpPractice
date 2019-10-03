@@ -75,6 +75,22 @@ app.post('/post', (req, res) => {
     });
 });
 
+app.put('/put/:id', (req, res) => {
+    let id = req.body.id + 1;
+    let message = req.body.message;
+
+    db.run('UPDATE test SET name = $message WHERE rowid = $id;', {
+        $id: id,
+        $message: message
+    }, (err) => {
+        if (err) {
+            throw err;
+        }
+    
+        console.log(`The record at index ${id} has been changed to ${message}`);
+    });
+});
+
 app.delete('/delete', (res) => {
     db.run('DELETE FROM test;', (err) => {
         if (err) {
@@ -86,10 +102,10 @@ app.delete('/delete', (res) => {
 });
 
 app.delete('/delete/:id', (req, res) => {
-    let id = req.body.id;
+    let id = req.body.id + 1;
 
     db.run('DELETE FROM test WHERE rowid = $id;', {
-        $id: id + 1
+        $id: id
     }, (err) => {
         if (err) {
             throw err;
