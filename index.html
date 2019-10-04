@@ -9,9 +9,9 @@
 <body>
     <h1>Full Stack Todo List</h1>
 
-    <div id="container">
+    <div class="container">
         <div>
-            <input id="inputMessage" placeholder="Add todos here" onkeyup="hitEnter()">
+            <input id="inputMessage" class="input" placeholder="Add todos here" onkeyup="addTodos()">
         </div>
         <div>
             <button class="mainButton" onclick="retrieveTodos()">Retrieve Todos From DB</button>
@@ -20,7 +20,7 @@
             <button class="mainButton" onclick="clearTodos()">Clear Todo List</button>
         </div>
 
-        <section id="listItemControls">
+        <section class="listItemControls">
             <div id="returnMessage"></div>
         </section>
     </div>
