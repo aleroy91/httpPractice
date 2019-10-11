@@ -7,6 +7,8 @@ let list = '';
 
 /*  TODOs
     
+    * Fix editTodos!!!
+    * Refactor code so no duplicate between the retrieve and add functions (for UI creation)
     * Use a loading symbol animation in css: https://codepen.io/aleksander351/pen/KzgKPo
 
 */
@@ -178,12 +180,19 @@ const editTodo = () => {
     })
     .then(res => res)
     .catch(error => console.error('Error:', error));
+
+    updateTodo(id, message);
+}
+
+const updateTodo = (index, content) => {
+
+    list.children[index].children[0].innerText = content;
+    closeTextBox();
 }
 
 const retrieveIndexOfElement = (element) => {
     for (let i = 0; i < list.children.length; i++) {
         if (list.children[i] === element) {
-            list.children[i].remove();
             return i;
         }
     }
