@@ -35,13 +35,12 @@ app.use(bodyParser());
 app.use(cors());
 
 db.run(`CREATE TABLE IF NOT EXISTS test (name string);`, (err) => {
-        if (err) {
-            console.log(err.message);
-        } else {
-            console.log("DB 'test' Created");
-        }
+    if (err) {
+        console.log(err.message);
+    } else {
+        console.log("DB 'test' Created");
     }
-);
+});
 
 app.get('/get', (req, res) => {
     db.all('SELECT * FROM test ORDER BY ROWID', (err, rows) => {

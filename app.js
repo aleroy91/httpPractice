@@ -7,13 +7,7 @@ let list = '';
 
 /*  TODOs
     
-    * Add edit function
-    * Implement local storage
-        - Remove get button
-        - Send all list additions, edits and deletions to the db
-        - For the sake of speed, the UI should make use of localstorage when app is running
-        - When starting the server afresh, the list should build from the contents of the db
-        - This should be marked with a little loading symbols
+    * Use a loading symbol animation in css: https://codepen.io/aleksander351/pen/KzgKPo
 
 */
 

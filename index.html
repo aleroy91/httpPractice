@@ -14,9 +14,6 @@
             <input id="inputMessage" class="input" placeholder="Add todos here" onkeyup="addTodos()">
         </div>
         <div>
-            <button class="mainButton" onclick="retrieveTodos()">Retrieve Todos From DB</button>
-        </div>
-        <div>
             <button class="mainButton" onclick="clearTodos()">Clear Todo List</button>
         </div>
 
@@ -24,4 +21,11 @@
             <div id="returnMessage"></div>
         </section>
     </div>
+
+    <script>
+        (function() {
+            selectList();
+            retrieveTodos();
+        })()
+    </script>
 </body>
