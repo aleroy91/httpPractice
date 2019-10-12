@@ -71,6 +71,7 @@ app.post('/post', (req, res) => {
         }
 
         console.log(`The following record has been created: ${testMessage}`);
+        res.status(201).send();
     });
 });
 
@@ -87,16 +88,18 @@ app.put('/put/:id', (req, res) => {
         }
     
         console.log(`The record at index ${id} has been changed to ${message}`);
+        res.status(200).send();
     });
 });
 
-app.delete('/delete', (res) => {
+app.delete('/delete', (req, res) => {
     db.run('DELETE FROM test;', (err) => {
         if (err) {
             throw err;
         }
 
         console.log("All Records Deleted");
+        res.status(200).send();
     });
 });
 
@@ -109,8 +112,9 @@ app.delete('/delete/:id', (req, res) => {
         if (err) {
             throw err;
         }
-    
+        
         console.log(`The record at index ${id} has been deleted`);
+        res.status(200).send();
     });
 });
 

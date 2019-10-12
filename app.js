@@ -67,6 +67,7 @@ const addTodos = () => {
                 mode: "cors"
             })
             .then(res => res)
+            .then(result => result.text())
             .catch(error => console.error('Error:', error));    
         }
 
@@ -112,6 +113,7 @@ const clearTodos = () => {
         mode: "cors"
     })
     .then(res => res)
+    .then(result => result.text())
     .catch(error => console.error('Error:', error));
 }
 
@@ -129,6 +131,7 @@ const deleteTodo = () => {
         mode: "cors"
     })
     .then(res => res)
+    .then(result => result.text())
     .catch(error => console.error('Error:', error));
 }
 
@@ -181,6 +184,7 @@ const editTodo = () => {
         mode: "cors"
     })
     .then(res => res)
+    .then(result => result.text())
     .catch(error => console.error('Error:', error));
 
     updateTodo(id, message);
