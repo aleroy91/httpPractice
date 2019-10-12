@@ -7,7 +7,6 @@ let list = '';
 
 /*  TODOs
     
-    * Fix editTodos!!!
     * Refactor code so no duplicate between the retrieve and add functions (for UI creation)
     * Use a loading symbol animation in css: https://codepen.io/aleksander351/pen/KzgKPo
 
@@ -26,25 +25,28 @@ const retrieveTodos = () => {
             let itemDiv = document.createElement('div');
             let deleteButton = document.createElement('span');
             let listItem = document.createElement('span');
+            let editBox = document.createElement('input');
             let itemContent = document.createTextNode(element.name);
+            
+            editBox.hidden = true;
+            editBox.className = 'input';
+            editBox.onblur = () => closeTextBox();
+            editBox.onkeyup = () => addEditedTodo();
 
             list.appendChild(itemDiv);
 
             itemDiv.className = 'mainButton todoContainer';
             itemDiv.appendChild(listItem);
             itemDiv.appendChild(deleteButton);
+            itemDiv.appendChild(editBox);
 
             listItem.className = 'todoItem';
             listItem.appendChild(itemContent);
-            listItem.onclick = () => { 
-                editTodo()
-            };
+            listItem.onclick = () => openTextBox();
 
             deleteButton.className = 'deleteButton';
             deleteButton.textContent = '\u{00D7}';
-            deleteButton.onclick = () => { 
-                deleteTodo()
-            };
+            deleteButton.onclick = () => deleteTodo();
         });
     })
     .catch(error => console.error('Error:', error));    
@@ -115,8 +117,8 @@ const clearTodos = () => {
 
 const deleteTodo = () => { 
     let elementToDelete = event.target.parentElement;
-
     let id = retrieveIndexOfElement(elementToDelete);
+    list.children[id].remove();
 
     fetch(deleteUrl + `/${id}`, {
         method: 'DELETE',
