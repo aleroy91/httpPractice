@@ -5,13 +5,6 @@ const editUrl = "http://localhost:3000/put";
 let postData = '';
 let list = '';
 
-/*  TODOs
-    
-    * Refactor code so no duplicate between the retrieve and add functions (for UI creation)
-    * Use a loading symbol animation in css: https://codepen.io/aleksander351/pen/KzgKPo
-
-*/
-
 const retrieveTodos = () => {
     clearList();
     selectList();
@@ -22,31 +15,7 @@ const retrieveTodos = () => {
         let output = JSON.parse(data);
 
         Object.values(output).forEach((element) => {
-            let itemDiv = document.createElement('div');
-            let deleteButton = document.createElement('span');
-            let listItem = document.createElement('span');
-            let editBox = document.createElement('input');
-            let itemContent = document.createTextNode(element.name);
-            
-            editBox.hidden = true;
-            editBox.className = 'input';
-            editBox.onblur = () => closeTextBox();
-            editBox.onkeyup = () => addEditedTodo();
-
-            list.appendChild(itemDiv);
-
-            itemDiv.className = 'mainButton todoContainer';
-            itemDiv.appendChild(listItem);
-            itemDiv.appendChild(deleteButton);
-            itemDiv.appendChild(editBox);
-
-            listItem.className = 'todoItem';
-            listItem.appendChild(itemContent);
-            listItem.onclick = () => openTextBox();
-
-            deleteButton.className = 'deleteButton';
-            deleteButton.textContent = '\u{00D7}';
-            deleteButton.onclick = () => deleteTodo();
+            createTodoElement(element.name);
         });
     })
     .catch(error => console.error('Error:', error));    
@@ -60,9 +29,7 @@ const addTodos = () => {
         if (newTodo) {
             fetch(postUrl, {
                 method: 'POST',
-                headers:{
-                'Content-Type': 'application/json'
-                },
+                headers: { 'Content-Type': 'application/json'},
                 body: JSON.stringify({message: newTodo}),
                 mode: "cors"
             })
@@ -71,32 +38,7 @@ const addTodos = () => {
             .catch(error => console.error('Error:', error));    
         }
 
-        let itemDiv = document.createElement('div');
-        let deleteButton = document.createElement('span');
-        let listItem = document.createElement('span');
-        let editBox = document.createElement('input');
-        let itemContent = document.createTextNode(newTodo);
-        
-        editBox.hidden = true;
-        editBox.className = 'input';
-        editBox.onblur = () => closeTextBox();
-        editBox.onkeyup = () => addEditedTodo();
-
-        list.appendChild(itemDiv);
-
-        itemDiv.className = 'mainButton todoContainer';
-        itemDiv.appendChild(listItem);
-        itemDiv.appendChild(deleteButton);
-        itemDiv.appendChild(editBox);
-
-        listItem.className = 'todoItem';
-        listItem.appendChild(itemContent);
-        listItem.onclick = () => openTextBox();
-
-        deleteButton.className = 'deleteButton';
-        deleteButton.textContent = '\u{00D7}';
-        deleteButton.onclick = () => deleteTodo();
-
+        createTodoElement(newTodo);
         clearInputField();
     }
 }
@@ -210,6 +152,34 @@ const clearList = () => {
             list.children[0].remove();
         }
     } 
+}
+
+const createTodoElement = (newTodo) => {
+    let itemDiv = document.createElement('div');
+    let deleteButton = document.createElement('span');
+    let listItem = document.createElement('span');
+    let editBox = document.createElement('input');
+    let itemContent = document.createTextNode(newTodo);
+    
+    editBox.hidden = true;
+    editBox.className = 'input';
+    editBox.onblur = () => closeTextBox();
+    editBox.onkeyup = () => addEditedTodo();
+
+    list.appendChild(itemDiv);
+
+    itemDiv.className = 'mainButton todoContainer';
+    itemDiv.appendChild(listItem);
+    itemDiv.appendChild(deleteButton);
+    itemDiv.appendChild(editBox);
+
+    listItem.className = 'todoItem';
+    listItem.appendChild(itemContent);
+    listItem.onclick = () => openTextBox();
+
+    deleteButton.className = 'deleteButton';
+    deleteButton.textContent = '\u{00D7}';
+    deleteButton.onclick = () => deleteTodo();
 }
 
 const clearInputField = () => document.getElementById('inputMessage').value = '';
