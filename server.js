@@ -24,17 +24,17 @@ const sqlite3 = require('sqlite3');
 
 const db = new sqlite3.Database('./db.sqlite', sqlite3.OPEN_READWRITE, (err) => {
     if (err) {
-      console.error(err.message)
+      console.error(err.message);
     }
 
-    console.log('Connected to the database.')
+    console.log('Connected to the database.');
 });
 
 app.use(morgan('tiny'));
 app.use(bodyParser());
 app.use(cors());
 
-db.run(`CREATE TABLE IF NOT EXISTS test (name string);`, (err) => {
+db.run(`CREATE TABLE IF NOT EXISTS test (id INTEGER PRIMARY KEY ASC, name STRING);`, (err) => {
     if (err) {
         console.log(err.message);
     } else {
@@ -43,7 +43,7 @@ db.run(`CREATE TABLE IF NOT EXISTS test (name string);`, (err) => {
 });
 
 app.get('/get', (req, res) => {
-    db.all('SELECT * FROM test ORDER BY ROWID', (err, rows) => {
+    db.all('SELECT * FROM test ORDER BY id', (err, rows) => {
         if (err) {
             throw err;
         }
@@ -61,9 +61,11 @@ app.get('/get', (req, res) => {
 });
 
 app.post('/post', (req, res) => {
+    let id = req.body.id;
     let testMessage = req.body.message; 
 
-    db.run('INSERT INTO test VALUES ($testMessage);', {
+    db.run('INSERT INTO test (id, name) VALUES ($id, $testMessage);', {
+        $id: id,
         $testMessage: testMessage
     }, (err) => {
         if (err) {
@@ -76,18 +78,18 @@ app.post('/post', (req, res) => {
 });
 
 app.put('/put/:id', (req, res) => {
-    let id = req.body.id + 1;
+    let idNumber = req.body.id + 1;
     let message = req.body.message;
 
-    db.run('UPDATE test SET name = $message WHERE rowid = $id;', {
-        $id: id,
+    db.run('UPDATE test SET name = $message WHERE id = $id;', {
+        $id: idNumber,
         $message: message
     }, (err) => {
         if (err) {
             throw err;
         }
     
-        console.log(`The record at index ${id} has been changed to ${message}`);
+        console.log(`The record at index ${idNumber} has been changed to ${message}`);
         res.status(200).send();
     });
 });
@@ -97,24 +99,34 @@ app.delete('/delete', (req, res) => {
         if (err) {
             throw err;
         }
-
-        console.log("All Records Deleted");
-        res.status(200).send();
     });
+
+    console.log("All Records Deleted"); 
+    res.status(200).send();    
 });
 
 app.delete('/delete/:id', (req, res) => {
-    let id = req.body.id + 1;
+    let idNumber = req.body.id + 1;
 
-    db.run('DELETE FROM test WHERE rowid = $id;', {
-        $id: id
+    db.run('DELETE FROM test WHERE id = $id;', {
+        $id: idNumber
     }, (err) => {
         if (err) {
             throw err;
         }
-        
-        console.log(`The record at index ${id} has been deleted`);
-        res.status(200).send();
+    });
+
+    db.all('SELECT * FROM test ORDER BY id', (err, rows) => {    
+        let data = {};
+
+        rows.forEach((row, i) => {
+            data[i] = {
+                name: row.name
+            };
+        });
+
+        console.log(`The record at index ${idNumber} has been deleted`);
+        res.status(200).send(data);    
     });
 });
 
