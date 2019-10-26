@@ -52,7 +52,8 @@ app.get('/get', (req, res) => {
 
         rows.forEach((row, i) => {
             data[i] = {
-                name: row.name
+                name: row.name,
+                id: row.id
             };
         });
 
@@ -78,7 +79,7 @@ app.post('/post', (req, res) => {
 });
 
 app.put('/put/:id', (req, res) => {
-    let idNumber = req.body.id + 1;
+    let idNumber = req.body.id;
     let message = req.body.message;
 
     db.run('UPDATE test SET name = $message WHERE id = $id;', {
@@ -106,7 +107,7 @@ app.delete('/delete', (req, res) => {
 });
 
 app.delete('/delete/:id', (req, res) => {
-    let idNumber = req.body.id + 1;
+    let idNumber = req.body.id;
 
     db.run('DELETE FROM test WHERE id = $id;', {
         $id: idNumber

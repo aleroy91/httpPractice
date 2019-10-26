@@ -15,7 +15,7 @@ const retrieveTodos = () => {
         let output = JSON.parse(data);
 
         Object.values(output).forEach((element) => {
-            createTodoElement(element.name);
+            createTodoElement(element.name, element.id);
         });
     })
     .catch(error => console.error('Error:', error));    
@@ -24,21 +24,24 @@ const retrieveTodos = () => {
 const addTodos = () => {
     if (hitEnter()) {
         selectList();
+        let todoId = list.childElementCount;
         let newTodo = document.getElementById('inputMessage').value;
 
         if (newTodo) {
             fetch(postUrl, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json'},
-                body: JSON.stringify({message: newTodo}),
+                body: JSON.stringify({
+                    id: todoId,
+                    message: newTodo
+                }),
                 mode: "cors"
             })
-            .then(res => res)
-            .then(result => result.text())
+            .then(res => res.text())
             .catch(error => console.error('Error:', error));    
         }
 
-        createTodoElement(newTodo);
+        createTodoElement(newTodo, todoId);
         clearInputField();
     }
 }
@@ -54,15 +57,14 @@ const clearTodos = () => {
         },
         mode: "cors"
     })
-    .then(res => res)
-    .then(result => result.text())
+    .then(res => res.text())
     .catch(error => console.error('Error:', error));
 }
 
 const deleteTodo = () => { 
-    let elementToDelete = event.target.parentElement;
-    let id = retrieveIndexOfElement(elementToDelete);
-    list.children[id].remove();
+    let listPosition = retrieveIndexOfElement(event.target.parentElement);
+    let id = event.target.parentElement.id;
+    list.children[listPosition].remove();
 
     fetch(deleteUrl + `/${id}`, {
         method: 'DELETE',
@@ -72,8 +74,7 @@ const deleteTodo = () => {
         body: JSON.stringify({id: id}),
         mode: "cors"
     })
-    .then(res => res)
-    .then(result => result.text())
+    .then(res => res.text())
     .catch(error => console.error('Error:', error));
 }
 
@@ -109,10 +110,9 @@ const addEditedTodo = () => {
 }
 
 const editTodo = () => { 
-    let indexToEdit = event.target.parentElement;
+    let id = event.target.parentElement.id;
     let message = event.target.value;
-
-    let id = retrieveIndexOfElement(indexToEdit);
+    let listItemToEdit = retrieveIndexOfElement(event.target.parentElement);
 
     fetch(editUrl + `/${id}`, {
         method: 'PUT',
@@ -129,7 +129,7 @@ const editTodo = () => {
     .then(result => result.text())
     .catch(error => console.error('Error:', error));
 
-    updateTodo(id, message);
+    updateTodo(listItemToEdit, message);
 }
 
 const updateTodo = (index, content) => {
@@ -154,7 +154,7 @@ const clearList = () => {
     } 
 }
 
-const createTodoElement = (newTodo) => {
+const createTodoElement = (newTodo, todoId) => {
     let itemDiv = document.createElement('div');
     let deleteButton = document.createElement('span');
     let listItem = document.createElement('span');
@@ -169,6 +169,7 @@ const createTodoElement = (newTodo) => {
     list.appendChild(itemDiv);
 
     itemDiv.className = 'mainButton todoContainer';
+    itemDiv.id = todoId;
     itemDiv.appendChild(listItem);
     itemDiv.appendChild(deleteButton);
     itemDiv.appendChild(editBox);
